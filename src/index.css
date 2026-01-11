@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap');
+
+:root {
+  /* StickyLife Color Palette */
+  --color-neno-yellow: #FFF9C4;
+  --color-week-white: #F7F9F9;
+  --color-year-kraft: #E0C9A6;
+  --color-ink-gray: #2D3436;
+  --color-coral-pink: #FF7675;
+  --color-sage-green: #55EFC4;
+}
+
+html, body, #root {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", Arial, sans-serif;
+  color: rgba(45, 52, 54, 0.85);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced Frosted Glass Effect */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+}
+
+.glass-surface:hover {
+  background: rgba(255, 255, 255, 0.5);
+  border: 0.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Handwritten Style for Notes */
+.handwritten {
+  font-family: 'Caveat', 'Patrick Hand', 'Kalam', cursive;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+}
+
+/* Enhanced Sticky Note Base */
+.sticky-note {
+  position: relative;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(45, 52, 54, 0.08), 
+              0 8px 24px rgba(45, 52, 54, 0.06),
+              0 1px 3px rgba(45, 52, 54, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: grab;
+  border-radius: 2px;
+}
+
+.sticky-note:hover {
+  box-shadow: 0 8px 20px rgba(45, 52, 54, 0.12), 
+              0 16px 40px rgba(45, 52, 54, 0.08),
+              0 2px 6px rgba(45, 52, 54, 0.15);
+  transform: translateY(-4px) rotate(0.5deg);
+}
+
+/* Paper texture */
+.paper-texture {
+  position: relative;
+  background-color: inherit;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 29px,
+      rgba(0, 0, 0, 0.015) 29px,
+      rgba(0, 0, 0, 0.015) 31px
+    );
+}
+
+/* Dog-ear fold effect */
+.dog-ear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent var(--color-coral-pink) transparent transparent;
+  filter: drop-shadow(-2px 2px 3px rgba(0, 0, 0, 0.15));
+  z-index: 2;
+}
+
+

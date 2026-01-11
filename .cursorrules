@@ -1,0 +1,17 @@
+# Project Context: StickyLife
+We are building a desktop widget app using Tauri (Rust) + React + TypeScript + Three.js.
+
+## Product Vision
+- A transparent, always-on-bottom desktop overlay for sticky notes.
+- Aesthetic: "Skeuomorphism Ultra" (Frosted glass + Paper texture).
+- Mascot: "Neno" (A stack of yellow sticky notes with a dog-ear).
+
+## Tech Stack Rules
+- Frontend: React, TailwindCSS (for UI), Three.js (for Neno).
+- Backend: Electron (Node.js).
+- Key Behavior: The window must be transparent and click-through (ignore mouse events) on empty areas.
+
+## Design System
+- Main Color: #FFF9C4 (Sticky Note Yellow).
+- Font: Handwritten style preferred for notes.
+- Vibe: Cozy, Tactile, Airy.

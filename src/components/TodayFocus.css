@@ -1,0 +1,173 @@
+.today-focus {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 249, 196, 0.85) 0%,
+    rgba(255, 247, 179, 0.85) 100%
+  );
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  
+  /* 纸张纹理 */
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.08) 2px,
+      rgba(255, 255, 255, 0.08) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  margin-top: 16px;
+  border: 1px solid rgba(220, 200, 150, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.today-focus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #DCC896;
+}
+
+.today-focus-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.today-focus-count {
+  font-size: 14px;
+  color: #666;
+  font-weight: bold;
+}
+
+.today-focus-empty {
+  text-align: center;
+  padding: 24px;
+  color: #999;
+}
+
+.today-focus-empty .hint {
+  font-size: 12px;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.today-focus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.today-focus-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(220, 200, 150, 0.4);
+  border-radius: 6px;
+  padding: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.today-focus-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.today-focus-item.completed {
+  background-color: #e8f5e9;
+  border-color: #81c784;
+  opacity: 0.7;
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.today-focus-item.completed .task-title {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.task-description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.task-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.task-week {
+  font-size: 10px;
+  color: #999;
+  background-color: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.task-remove {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  color: #999;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.task-remove:hover {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
