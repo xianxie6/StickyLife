@@ -15,7 +15,7 @@ function createWindow() {
     height: 1080,
     transparent: true, // 透明窗口
     frame: false, // 无边框
-    alwaysOnTop: true, // 始终置顶
+    alwaysOnTop: false, // 不始终置顶，允许用户切换到其他程序
     skipTaskbar: false, // 在任务栏显示（开发时方便查看）
     resizable: true,
     webPreferences: {
@@ -37,8 +37,9 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../dist/index.html'));
   }
 
-  // 设置点击穿透（忽略鼠标事件）
-  mainWindow.setIgnoreMouseEvents(true, { forward: true });
+  // 默认不点击穿透，让React可以处理鼠标事件
+  // 点击穿透将通过CSS的pointer-events控制
+  mainWindow.setIgnoreMouseEvents(false);
 
   // 窗口关闭时
   mainWindow.on('closed', () => {

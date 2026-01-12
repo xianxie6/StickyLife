@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TodayFocusArea } from './TodayFocusArea';
 import { KRTaskCard } from './KRTaskCard';
-import { Neno } from './NenoFigma';
+import { DockedPuffy } from './DockedPuffy';
 import { StickyNote, WeekKR } from '../types';
 import { Plus } from 'lucide-react';
 
@@ -14,6 +14,13 @@ interface MergedFocusCardProps {
   onUpdateNote: (id: string, updates: Partial<StickyNote>) => void;
   onDeleteNote: (id: string) => void;
   onCompleteNote: (id: string) => void;
+  isDocked?: boolean;
+  onDockChange?: (docked: boolean) => void;
+  mascotData?: {
+    currentWeek: number;
+    completionRate: number;
+    overdueCount: number;
+  };
 }
 
 export function MergedFocusCard({
@@ -23,10 +30,15 @@ export function MergedFocusCard({
   onAddNote,
   onUpdateNote,
   onDeleteNote,
-  onCompleteNote
+  onCompleteNote,
+  isDocked = false,
+  onDockChange,
+  mascotData,
 }: MergedFocusCardProps) {
-  const [nenoMood, setNenoMood] = useState<'idle' | 'happy' | 'working' | 'sleeping'>('idle');
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [weekKRs, setWeekKRs] = useState<Record<number, WeekKR[]>>({
     4: [
       {
@@ -159,6 +171,35 @@ export function MergedFocusCard({
   const selectedWeekKRs = selectedWeek ? (weekKRs[selectedWeek] || []) : [];
   const todayNotes = notes.filter(note => note.date === new Date().toISOString().split('T')[0]);
 
+  // 监听滚动事件，显示/隐藏滚动条
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+      
+      // 清除之前的定时器
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // 滚动停止后300ms隐藏滚动条
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 300);
+    };
+
+    scrollContainer.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const getWeekColor = (week: number) => {
     if (week <= completedWeeks) {
       return '#10b981'; // Green for completed
@@ -170,18 +211,13 @@ export function MergedFocusCard({
 
   return (
     <div className="relative">
-      {/* Neno趴在卡片左下角 */}
-      <div 
-        className="absolute -bottom-8 -left-12 z-20 cursor-pointer"
-        onMouseEnter={() => setNenoMood('happy')}
-        onMouseLeave={() => setNenoMood('idle')}
-        onClick={() => {
-          setNenoMood('working');
-          setTimeout(() => setNenoMood('idle'), 2000);
-        }}
-      >
-        <Neno mood={nenoMood} size="large" />
-      </div>
+      {/* 停靠的 Puffy 在卡片左下角 */}
+      {isDocked && mascotData && (
+        <DockedPuffy
+          mascotData={mascotData}
+          onWakeUp={() => onDockChange?.(false)}
+        />
+      )}
 
       <div 
         className="glass-surface rounded-2xl shadow-2xl flex flex-col"
@@ -375,7 +411,10 @@ export function MergedFocusCard({
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="overflow-y-auto flex-1 px-8 py-6">
+        <div 
+          ref={scrollContainerRef}
+          className={`overflow-y-auto flex-1 px-8 py-6 scroll-container ${isScrolling ? 'is-scrolling' : ''}`}
+        >
           {/* Week Detail Section (Expandable) */}
           <AnimatePresence>
             {selectedWeek && (

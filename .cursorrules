@@ -1,5 +1,4 @@
 # Project Context: StickyLife
-We are building a desktop widget app using Tauri (Rust) + React + TypeScript + Three.js.
 
 ## Product Vision
 - A transparent, always-on-bottom desktop overlay for sticky notes.
@@ -7,11 +6,32 @@ We are building a desktop widget app using Tauri (Rust) + React + TypeScript + T
 - Mascot: "Neno" (A stack of yellow sticky notes with a dog-ear).
 
 ## Tech Stack Rules
-- Frontend: React, TailwindCSS (for UI), Three.js (for Neno).
-- Backend: Electron (Node.js).
-- Key Behavior: The window must be transparent and click-through (ignore mouse events) on empty areas.
+- **Frontend**: React 18 + TypeScript 5.2 + Vite 5
+- **Desktop Framework**: Electron 28 (Node.js)
+- **UI Framework**: Tailwind CSS 3.4 + Framer Motion 12
+- **3D Rendering**: Three.js 0.182 (for Neno mascot)
+- **Drag & Drop**: React DnD 16
+- **Icons**: Lucide React 0.562
+- **Key Behavior**: The window must be transparent and click-through (ignore mouse events) on empty areas.
 
 ## Design System
-- Main Color: #FFF9C4 (Sticky Note Yellow).
-- Font: Handwritten style preferred for notes.
-- Vibe: Cozy, Tactile, Airy.
+- **Main Color**: #FFF9C4 (Sticky Note Yellow)
+- **Font**: Handwritten style (Caveat, Patrick Hand, Kalam) for notes
+- **Vibe**: Cozy, Tactile, Airy
+- **Style Classes**: `.glass-surface`, `.paper-texture`, `.handwritten`, `.sticky-note`
+
+## Data Model
+- **StickyNote**: Simple note with content, layer (daily/weekly/yearly), date
+- **WeekKR**: Key Results for each week (1-12 weeks)
+- **Storage**: localStorage (keys: `stickylife-notes`, `stickylife-completed`)
+
+## Platform Support
+- ✅ macOS (DMG, ZIP)
+- ✅ Windows (NSIS, ZIP)
+- ✅ Linux (AppImage, DEB)
+
+## Code Style
+- Use functional components with Hooks
+- TypeScript types in `src/types/index.ts`
+- Tailwind CSS classes + custom CSS
+- PascalCase for components, camelCase for variables
