@@ -6,16 +6,22 @@
 
 ## 技术栈
 
-- **前端框架**: React 18 + TypeScript
-- **构建工具**: Vite
-- **桌面框架**: Electron
-- **样式**: CSS (TailwindCSS 可选)
+- **前端框架**: React 18 + TypeScript 5.2
+- **构建工具**: Vite 5
+- **桌面框架**: Electron 28
+- **UI 框架**: Tailwind CSS 3.4 + Framer Motion 12
+- **3D 渲染**: Three.js 0.182
+- **拖拽**: React DnD 16
 
 ## 功能特性
 
 - ✅ 透明窗口，始终置顶
 - ✅ 点击穿透（鼠标悬停在便签上才可交互）
 - ✅ 无边框设计
+- ✅ 可拖拽主卡片
+- ✅ 12 周计划进度追踪
+- ✅ 今日聚焦任务管理
+- ✅ Focus State Indicator（呼吸动画指示器）
 - ✅ 跨平台支持（Windows、macOS、Linux）
 
 ## 开发
