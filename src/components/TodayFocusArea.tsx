@@ -85,7 +85,7 @@ export function TodayFocusArea({
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={() => handleEdit(note.id)}
-                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs"
+                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs tactile-button"
                   >
                     ✓
                   </button>
@@ -94,7 +94,7 @@ export function TodayFocusArea({
                       setEditingId(null);
                       setEditContent('');
                     }}
-                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs"
+                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs tactile-button"
                   >
                     ✗
                   </button>
@@ -190,7 +190,7 @@ export function TodayFocusArea({
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={handleAdd}
-                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs"
+                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs tactile-button"
                   >
                     添加
                   </button>
@@ -199,7 +199,7 @@ export function TodayFocusArea({
                       setIsAdding(false);
                       setNewContent('');
                     }}
-                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs"
+                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs tactile-button"
                   >
                     取消
                   </button>

@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TodayFocusArea } from './TodayFocusArea';
 import { KRTaskCard } from './KRTaskCard';
-import { DockedPuffy } from './DockedPuffy';
 import { StickyNote, WeekKR } from '../types';
 import { Plus } from 'lucide-react';
 
@@ -14,13 +13,6 @@ interface MergedFocusCardProps {
   onUpdateNote: (id: string, updates: Partial<StickyNote>) => void;
   onDeleteNote: (id: string) => void;
   onCompleteNote: (id: string) => void;
-  isDocked?: boolean;
-  onDockChange?: (docked: boolean) => void;
-  mascotData?: {
-    currentWeek: number;
-    completionRate: number;
-    overdueCount: number;
-  };
 }
 
 export function MergedFocusCard({
@@ -31,9 +23,6 @@ export function MergedFocusCard({
   onUpdateNote,
   onDeleteNote,
   onCompleteNote,
-  isDocked = false,
-  onDockChange,
-  mascotData,
 }: MergedFocusCardProps) {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -211,14 +200,6 @@ export function MergedFocusCard({
 
   return (
     <div className="relative">
-      {/* 停靠的 Puffy 在卡片左下角 */}
-      {isDocked && mascotData && (
-        <DockedPuffy
-          mascotData={mascotData}
-          onWakeUp={() => onDockChange?.(false)}
-        />
-      )}
-
       <div 
         className="glass-surface rounded-2xl shadow-2xl flex flex-col"
         style={{
@@ -468,15 +449,75 @@ export function MergedFocusCard({
 
           {/* Today's Focus Area */}
           <div className="overflow-x-auto -mx-8 px-8">
-            <div className="mb-3">
-              <h3 className="text-lg font-medium opacity-70">今日聚焦</h3>
-              <p className="text-xs opacity-50">
-                {new Date().toLocaleDateString('zh-CN', { 
-                  month: 'long', 
-                  day: 'numeric', 
-                  weekday: 'long' 
-                })}
-              </p>
+            <div className="mb-3 relative flex items-center gap-2">
+              {/* Focus State Indicator - Subtle Ambient Presence */}
+              {(() => {
+                const todayNotes = notes.filter(note => note.date === new Date().toISOString().split('T')[0]);
+                const hasTodayTasks = todayNotes.length > 0;
+                const focusState = {
+                  breathingOpacity: hasTodayTasks ? [0.6, 1, 0.6] : [0.4, 0.8, 0.4],
+                  coreGradient: hasTodayTasks 
+                    ? 'radial-gradient(circle, rgba(218, 165, 32, 0.9) 0%, rgba(218, 165, 32, 0.45) 60%, transparent 100%)'
+                    : 'radial-gradient(circle, rgba(139, 92, 46, 0.75) 0%, rgba(139, 92, 46, 0.35) 60%, transparent 100%)',
+                  shadowBlur: hasTodayTasks ? 12 : 8,
+                  shadowOpacity: hasTodayTasks ? 0.6 : 0.4,
+                  pulseOpacity: hasTodayTasks ? 0.5 : 0.35,
+                  pulseGradient: hasTodayTasks
+                    ? 'radial-gradient(circle, rgba(218, 165, 32, 0.6) 0%, transparent 80%)'
+                    : 'radial-gradient(circle, rgba(139, 92, 46, 0.45) 0%, transparent 80%)'
+                };
+
+                return (
+                  <motion.div
+                    className="relative w-4 h-4 flex-shrink-0"
+                    animate={{
+                      opacity: focusState.breathingOpacity,
+                    }}
+                    transition={{
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {/* Gentle Core */}
+                    <div 
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: focusState.coreGradient,
+                        boxShadow: `0 0 ${focusState.shadowBlur}px rgba(139, 92, 46, ${focusState.shadowOpacity})`
+                      }}
+                    />
+                    
+                    {/* Quiet Pulse */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [focusState.pulseOpacity, 0, focusState.pulseOpacity],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      style={{
+                        background: focusState.pulseGradient,
+                      }}
+                    />
+                  </motion.div>
+                );
+              })()}
+
+              <div>
+                <h3 className="text-lg font-medium opacity-70">今日聚焦</h3>
+                <p className="text-xs opacity-50">
+                  {new Date().toLocaleDateString('zh-CN', { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    weekday: 'long' 
+                  })}
+                </p>
+              </div>
             </div>
             
             <TodayFocusArea
