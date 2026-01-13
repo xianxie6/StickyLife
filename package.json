@@ -2,6 +2,8 @@
   "name": "sticky-life",
   "private": true,
   "version": "0.1.0",
+  "description": "A transparent, always-on-bottom desktop overlay for sticky notes",
+  "author": "xianxie6",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
