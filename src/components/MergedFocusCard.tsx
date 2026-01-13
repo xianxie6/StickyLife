@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TodayFocusArea } from './TodayFocusArea';
 import { KRTaskCard } from './KRTaskCard';
@@ -25,9 +25,6 @@ export function MergedFocusCard({
   onCompleteNote,
 }: MergedFocusCardProps) {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [weekKRs, setWeekKRs] = useState<Record<number, WeekKR[]>>({
     4: [
       {
@@ -159,35 +156,6 @@ export function MergedFocusCard({
 
   const selectedWeekKRs = selectedWeek ? (weekKRs[selectedWeek] || []) : [];
   const todayNotes = notes.filter(note => note.date === new Date().toISOString().split('T')[0]);
-
-  // 监听滚动事件，显示/隐藏滚动条
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      
-      // 清除之前的定时器
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-      
-      // 滚动停止后300ms隐藏滚动条
-      scrollTimeoutRef.current = setTimeout(() => {
-        setIsScrolling(false);
-      }, 300);
-    };
-
-    scrollContainer.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
 
   const getWeekColor = (week: number) => {
     if (week <= completedWeeks) {
@@ -392,10 +360,7 @@ export function MergedFocusCard({
         </div>
 
         {/* Scrollable Content Area */}
-        <div 
-          ref={scrollContainerRef}
-          className={`overflow-y-auto flex-1 px-8 py-6 scroll-container ${isScrolling ? 'is-scrolling' : ''}`}
-        >
+        <div className="overflow-y-auto flex-1 px-8 py-6">
           {/* Week Detail Section (Expandable) */}
           <AnimatePresence>
             {selectedWeek && (

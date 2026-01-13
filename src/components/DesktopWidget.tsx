@@ -1,8 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { MergedFocusCard } from './MergedFocusCard';
 import { StickyNote } from '../types';
 import { motion } from 'framer-motion';
-import { useDraggable } from '../hooks/useDraggable';
 
 interface DesktopWidgetProps {
   notes: StickyNote[];
@@ -25,27 +24,8 @@ export function DesktopWidget({
 }: DesktopWidgetProps) {
   const currentWeek = 4;
   const completedWeeks = 3;
-  const cardRef = useRef<HTMLDivElement>(null);
 
   const dailyNotes = notes.filter(n => n.layer === 'daily');
-
-  // 拖拽功能
-  const { position: dragPosition, handleMouseDown, setPosition } = useDraggable();
-
-
-  // 初始位置：居中底部（延迟设置，确保 DOM 已渲染）
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (cardRef.current) {
-        const rect = cardRef.current.getBoundingClientRect();
-        setPosition({
-          x: window.innerWidth / 2 - rect.width / 2,
-          y: window.innerHeight - rect.height - 64,
-        });
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [setPosition]);
 
 
   return (
@@ -60,25 +40,12 @@ export function DesktopWidget({
 
       {/* Frameless Transparent Glass Layer Container */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Center/Bottom: Merged 12-Week + Today's Focus - 可拖拽 */}
-        <motion.div
-          ref={cardRef}
+        {/* Center/Bottom: Merged 12-Week + Today's Focus */}
+        <motion.div 
           initial={{ opacity: 0, y: 40 }}
-          animate={{
-            opacity: 1,
-            x: dragPosition.x,
-            y: dragPosition.y,
-          }}
-          transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 30 }}
-          onMouseDown={handleMouseDown}
-          className="absolute pointer-events-auto cursor-move"
-          style={{
-            left: 0,
-            top: 0,
-            userSelect: 'none',
-          }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 pointer-events-auto"
         >
           <MergedFocusCard
             notes={dailyNotes}
