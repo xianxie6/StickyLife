@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TodayFocusArea } from './TodayFocusArea';
 import { KRTaskCard } from './KRTaskCard';
 import { StickyNote, WeekKR } from '../types';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 interface MergedFocusCardProps {
   notes: StickyNote[];
@@ -166,6 +166,12 @@ export function MergedFocusCard({
     return 'transparent';
   };
 
+  const handleClose = async () => {
+    if (window.electronAPI) {
+      await window.electronAPI.hideWindow();
+    }
+  };
+
   return (
     <div className="relative">
       <div 
@@ -174,24 +180,54 @@ export function MergedFocusCard({
           width: '25vw',
           minWidth: '400px',
           maxHeight: 'calc(100vh - 160px)',
-          backdropFilter: 'blur(30px)',
-          background: 'rgba(255, 255, 255, 0.35)',
+          // iOS 液体玻璃效果 - 7% 透明度
+          backdropFilter: 'blur(40px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(200%)',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.05) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: `
+            0 8px 32px 0 rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 0 rgba(255, 255, 255, 0.5)
+          `,
+          color: '#ffffff', // 所有文字默认白色
         }}
       >
-        {/* 12 Week Progress Circles - Fixed Header */}
-        <div className="px-8 py-6 border-b border-white/20 flex-shrink-0">
+        {/* 关闭按钮 - 右上角 */}
+        <button
+          onClick={handleClose}
+          className="absolute top-4 right-4 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 transition-all backdrop-blur-sm"
+          style={{
+            pointerEvents: 'auto',
+            WebkitAppRegion: 'no-drag', // 按钮区域不可拖拽
+            cursor: 'pointer',
+          }}
+          title="关闭窗口"
+        >
+          <X className="w-4 h-4" style={{ color: '#ffffff' }} />
+        </button>
+        {/* 12 Week Progress Circles - Fixed Header - 可拖拽区域 */}
+        <div 
+          className="px-8 py-6 border-b border-white/20 flex-shrink-0"
+          style={{
+            WebkitAppRegion: 'drag',
+            cursor: 'move',
+          }}
+        >
           {/* Sprint Title */}
           <div className="mb-4 text-center">
             <h2 
-              className="text-2xl opacity-60 mb-1"
+              className="text-2xl mb-1"
               style={{ 
                 fontFamily: "'Caveat', cursive",
-                fontWeight: 600
+                fontWeight: 600,
+                color: '#ffffff',
+                opacity: 0.9
               }}
             >
               Sprint 1
             </h2>
-            <p className="text-sm opacity-50">
+            <p className="text-sm" style={{ color: '#ffffff', opacity: 0.7 }}>
               第 {currentWeek} 周 / 共 {totalWeeks} 周
             </p>
           </div>
@@ -209,6 +245,7 @@ export function MergedFocusCard({
                   onClick={() => handleWeekClick(week)}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
+                  style={{ WebkitAppRegion: 'no-drag' }}
                 >
                   {/* Week Circle */}
                   <div
@@ -232,7 +269,7 @@ export function MergedFocusCard({
                     <span 
                       className="text-sm font-medium handwritten relative z-10"
                       style={{ 
-                        color: week <= currentWeek ? 'white' : 'rgba(139, 69, 19, 0.5)'
+                        color: '#ffffff'
                       }}
                     >
                       {week}
@@ -281,6 +318,7 @@ export function MergedFocusCard({
                   onClick={() => handleWeekClick(week)}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
+                  style={{ WebkitAppRegion: 'no-drag' }}
                 >
                   {/* Week Circle */}
                   <div
@@ -304,7 +342,7 @@ export function MergedFocusCard({
                     <span 
                       className="text-sm font-medium handwritten relative z-10"
                       style={{ 
-                        color: week <= currentWeek ? 'white' : 'rgba(139, 69, 19, 0.5)'
+                        color: '#ffffff'
                       }}
                     >
                       {week}
@@ -351,7 +389,7 @@ export function MergedFocusCard({
                   transition={{ duration: 1, delay: 0.5 }}
                 />
               </div>
-              <div className="flex justify-between mt-1 text-xs opacity-50">
+              <div className="flex justify-between mt-1 text-xs" style={{ color: '#ffffff', opacity: 0.7 }}>
                 <span>已完成: {completedWeeks} 周</span>
                 <span>进度: {Math.round((completedWeeks / totalWeeks) * 100)}%</span>
               </div>
@@ -360,7 +398,12 @@ export function MergedFocusCard({
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="overflow-y-auto flex-1 px-8 py-6">
+        <div 
+          className="overflow-y-auto flex-1 px-8 py-6"
+          style={{
+            WebkitAppRegion: 'no-drag',
+          }}
+        >
           {/* Week Detail Section (Expandable) */}
           <AnimatePresence>
             {selectedWeek && (
@@ -372,16 +415,16 @@ export function MergedFocusCard({
                 className="overflow-hidden overflow-x-hidden border-b border-white/20 pb-6 mb-6"
               >
                 <div className="pt-4">
-                  <h3 className="text-xl handwritten mb-1" style={{ color: 'rgba(45, 52, 54, 0.9)' }}>
+                  <h3 className="text-xl handwritten mb-1" style={{ color: '#ffffff' }}>
                     第 {selectedWeek} 周
                   </h3>
-                  <p className="text-xs opacity-50 mb-4">{getWeekDateRange(selectedWeek)}</p>
+                  <p className="text-xs mb-4" style={{ color: '#ffffff', opacity: 0.7 }}>{getWeekDateRange(selectedWeek)}</p>
                   
-                  <h4 className="text-sm font-medium opacity-70 mb-3">关键结果:</h4>
+                  <h4 className="text-sm font-medium mb-3" style={{ color: '#ffffff', opacity: 0.8 }}>关键结果:</h4>
                   
                   <div className="space-y-3">
                     {selectedWeekKRs.length === 0 ? (
-                      <div className="text-center py-8 opacity-40">
+                      <div className="text-center py-8" style={{ color: '#ffffff', opacity: 0.6 }}>
                         <p className="text-sm">该周还没有设置关键结果</p>
                         <p className="text-xs mt-2">点击下方"添加 KR"按钮开始</p>
                       </div>
@@ -401,7 +444,8 @@ export function MergedFocusCard({
                     {selectedWeekKRs.length < 3 && (
                       <button
                         onClick={() => handleAddKR(selectedWeek)}
-                        className="w-full py-2 rounded-lg border border-dashed border-white/30 hover:border-white/50 hover:bg-white/10 transition-all text-sm opacity-60 hover:opacity-100"
+                        className="w-full py-2 rounded-lg border border-dashed border-white/30 hover:border-white/50 hover:bg-white/10 transition-all text-sm"
+                        style={{ color: '#ffffff', opacity: 0.8, WebkitAppRegion: 'no-drag' }}
                       >
                         + 添加 KR
                       </button>
@@ -474,8 +518,8 @@ export function MergedFocusCard({
               })()}
 
               <div>
-                <h3 className="text-lg font-medium opacity-70">今日聚焦</h3>
-                <p className="text-xs opacity-50">
+                <h3 className="text-lg font-medium" style={{ color: '#ffffff', opacity: 0.9 }}>今日聚焦</h3>
+                <p className="text-xs" style={{ color: '#ffffff', opacity: 0.7 }}>
                   {new Date().toLocaleDateString('zh-CN', { 
                     month: 'long', 
                     day: 'numeric', 

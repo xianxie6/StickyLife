@@ -76,3 +76,12 @@ ipcMain.handle('set-ignore-cursor-events', (_event, ignore: boolean) => {
   return { success: false };
 });
 
+// IPC 处理：隐藏窗口（不退出应用）
+ipcMain.handle('hide-window', () => {
+  if (mainWindow) {
+    mainWindow.hide();
+    return { success: true };
+  }
+  return { success: false };
+});
+

@@ -4,6 +4,8 @@ import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld('electronAPI', {
   setIgnoreCursorEvents: (ignore: boolean) =>
     ipcRenderer.invoke('set-ignore-cursor-events', ignore),
+  hideWindow: () =>
+    ipcRenderer.invoke('hide-window'),
 });
 
 // 类型声明（供 TypeScript 使用）
@@ -11,6 +13,7 @@ declare global {
   interface Window {
     electronAPI: {
       setIgnoreCursorEvents: (ignore: boolean) => Promise<{ success: boolean }>;
+      hideWindow: () => Promise<{ success: boolean }>;
     };
   }
 }

@@ -48,7 +48,7 @@ export function TodayFocusArea({
   };
 
   return (
-    <div className="flex items-stretch gap-3 min-h-32">
+    <div className="flex items-stretch gap-3 min-h-32" style={{ WebkitAppRegion: 'no-drag' }}>
       <AnimatePresence mode="popLayout">
         {/* Existing Today Notes */}
         {todayNotes.map((note, index) => (
@@ -85,7 +85,16 @@ export function TodayFocusArea({
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={() => handleEdit(note.id)}
-                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs tactile-button"
+                    className="flex-1 py-1 rounded transition-all text-xs tactile-button"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.07)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.07)';
+                    }}
                   >
                     ✓
                   </button>
@@ -94,7 +103,16 @@ export function TodayFocusArea({
                       setEditingId(null);
                       setEditContent('');
                     }}
-                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs tactile-button"
+                    className="flex-1 py-1 rounded transition-all text-xs tactile-button"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.07)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.07)';
+                    }}
                   >
                     ✗
                   </button>
@@ -135,7 +153,16 @@ export function TodayFocusArea({
                       e.stopPropagation();
                       onCompleteNote(note.id);
                     }}
-                    className="flex-1 py-1 rounded bg-white/80 hover:bg-white transition-all text-xs flex items-center justify-center"
+                    className="flex-1 py-1 rounded transition-all text-xs flex items-center justify-center"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.14)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.14)';
+                    }}
                     title="完成"
                   >
                     <Check className="w-3 h-3" style={{ color: '#55EFC4' }} />
@@ -145,7 +172,16 @@ export function TodayFocusArea({
                       e.stopPropagation();
                       onDeleteNote(note.id);
                     }}
-                    className="flex-1 py-1 rounded bg-white/80 hover:bg-white transition-all text-xs flex items-center justify-center"
+                    className="flex-1 py-1 rounded transition-all text-xs flex items-center justify-center"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.14)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.14)';
+                    }}
                     title="删除"
                   >
                     <X className="w-3 h-3" style={{ color: '#FF7675' }} />
@@ -190,7 +226,17 @@ export function TodayFocusArea({
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={handleAdd}
-                    className="flex-1 py-1 rounded bg-white/60 hover:bg-white/80 transition-all text-xs tactile-button"
+                    className="flex-1 py-1 rounded transition-all text-xs tactile-button"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.07)',
+                      color: '#999',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.07)';
+                    }}
                   >
                     添加
                   </button>
@@ -199,7 +245,17 @@ export function TodayFocusArea({
                       setIsAdding(false);
                       setNewContent('');
                     }}
-                    className="flex-1 py-1 rounded hover:bg-black/5 transition-all text-xs tactile-button"
+                    className="flex-1 py-1 rounded transition-all text-xs tactile-button"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.07)',
+                      color: '#999',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.07)';
+                    }}
                   >
                     取消
                   </button>

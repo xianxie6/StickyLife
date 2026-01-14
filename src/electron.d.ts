@@ -5,6 +5,7 @@ declare global {
   interface Window {
     electronAPI?: {
       setIgnoreCursorEvents: (ignore: boolean) => Promise<{ success: boolean }>;
+      hideWindow: () => Promise<{ success: boolean }>;
     };
   }
 }
