@@ -9,15 +9,17 @@ const __dirname = dirname(__filename);
 let mainWindow: BrowserWindow | null = null;
 
 function createWindow() {
-  // 创建浏览器窗口
+  // 创建浏览器窗口 - 窗口大小匹配卡片大小
   mainWindow = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    width: 450, // 卡片宽度（最小400px，设置为450px）
+    height: 600, // 初始高度，会根据内容自动调整
     transparent: true, // 透明窗口
     frame: false, // 无边框
     alwaysOnTop: false, // 不始终置顶，允许用户切换到其他程序
     skipTaskbar: false, // 在任务栏显示（开发时方便查看）
-    resizable: true,
+    resizable: true, // 允许调整大小
+    minWidth: 400, // 最小宽度
+    minHeight: 300, // 最小高度
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -80,6 +82,24 @@ ipcMain.handle('set-ignore-cursor-events', (_event, ignore: boolean) => {
 ipcMain.handle('hide-window', () => {
   if (mainWindow) {
     mainWindow.hide();
+    return { success: true };
+  }
+  return { success: false };
+});
+
+// IPC 处理：调整窗口大小
+ipcMain.handle('resize-window', (_event, width: number, height: number) => {
+  if (mainWindow) {
+    // 确保宽度和高度在合理范围内
+    const minWidth = 400;
+    const minHeight = 300;
+    const maxWidth = 800;
+    const maxHeight = 1200;
+    
+    const finalWidth = Math.max(minWidth, Math.min(maxWidth, width));
+    const finalHeight = Math.max(minHeight, Math.min(maxHeight, height));
+    
+    mainWindow.setSize(finalWidth, finalHeight);
     return { success: true };
   }
   return { success: false };

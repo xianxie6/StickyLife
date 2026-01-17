@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('set-ignore-cursor-events', ignore),
   hideWindow: () =>
     ipcRenderer.invoke('hide-window'),
+  resizeWindow: (width: number, height: number) =>
+    ipcRenderer.invoke('resize-window', width, height),
 });
 
 // 类型声明（供 TypeScript 使用）
@@ -14,6 +16,7 @@ declare global {
     electronAPI: {
       setIgnoreCursorEvents: (ignore: boolean) => Promise<{ success: boolean }>;
       hideWindow: () => Promise<{ success: boolean }>;
+      resizeWindow: (width: number, height: number) => Promise<{ success: boolean }>;
     };
   }
 }

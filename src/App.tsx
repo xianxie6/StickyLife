@@ -6,6 +6,7 @@ import { StickyNote } from './types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import { useStore } from './store/useStore';
 
 // Detect touch device
 const isTouchDevice = () => {
@@ -13,26 +14,21 @@ const isTouchDevice = () => {
 };
 
 function App() {
+  const { tasks, isLoading, updateTasks, addTask, updateTask, deleteTask } = useStore();
   const [notes, setNotes] = useState<StickyNote[]>([]);
   const [completedNotes, setCompletedNotes] = useState<StickyNote[]>([]);
   const isIgnoringRef = useRef(true);
 
-  // Load data from localStorage
+  // 同步 store 中的 tasks 到本地 state
   useEffect(() => {
-    const savedNotes = localStorage.getItem('stickylife-notes');
-    const savedCompleted = localStorage.getItem('stickylife-completed');
-    if (savedNotes) setNotes(JSON.parse(savedNotes));
-    if (savedCompleted) setCompletedNotes(JSON.parse(savedCompleted));
-  }, []);
-
-  // Save data to localStorage
-  useEffect(() => {
-    localStorage.setItem('stickylife-notes', JSON.stringify(notes));
-  }, [notes]);
-
-  useEffect(() => {
-    localStorage.setItem('stickylife-completed', JSON.stringify(completedNotes));
-  }, [completedNotes]);
+    if (!isLoading) {
+      // 分离已完成和未完成的任务
+      const activeTasks = tasks.filter(t => !t.completed);
+      const completed = tasks.filter(t => t.completed);
+      setNotes(activeTasks);
+      setCompletedNotes(completed);
+    }
+  }, [tasks, isLoading]);
 
   const addNote = useCallback((note: Omit<StickyNote, 'id' | 'createdAt'>) => {
     const newNote: StickyNote = {
@@ -41,23 +37,27 @@ function App() {
       createdAt: new Date().toISOString(),
     };
     setNotes(prev => [...prev, newNote]);
-  }, []);
+    addTask(newNote);
+  }, [addTask]);
 
   const updateNote = useCallback((id: string, updates: Partial<StickyNote>) => {
     setNotes(prev => prev.map(note => note.id === id ? { ...note, ...updates } : note));
-  }, []);
+    updateTask(id, updates);
+  }, [updateTask]);
 
   const deleteNote = useCallback((id: string) => {
     setNotes(prev => prev.filter(note => note.id !== id));
-  }, []);
+    deleteTask(id);
+  }, [deleteTask]);
 
   const completeNote = useCallback((id: string) => {
     const note = notes.find(n => n.id === id);
     if (note) {
       setCompletedNotes(prev => [...prev, { ...note, completed: true }]);
       setNotes(prev => prev.filter(n => n.id !== id));
+      updateTask(id, { completed: true });
     }
-  }, [notes]);
+  }, [notes, updateTask]);
 
   const migrateNote = useCallback((id: string, newLayer: 'daily' | 'weekly' | 'yearly', newDate?: string) => {
     setNotes(prev => prev.map(note => {
@@ -100,24 +100,21 @@ function App() {
   return (
     <DndProvider backend={backend}>
       <div 
-        className="background-container"
-        onMouseEnter={handleMouseEnterBackground}
-        onMouseLeave={handleMouseLeaveNote}
+        className="w-full h-full overflow-hidden"
+        style={{
+          backgroundColor: 'transparent',
+          pointerEvents: 'none' // 默认点击穿透
+        }}
       >
-        <div
-          onMouseEnter={handleMouseEnterNote}
-          onMouseLeave={handleMouseLeaveNote}
-        >
-          <DesktopWidget
-            notes={notes}
-            completedNotes={completedNotes}
-            onAddNote={addNote}
-            onUpdateNote={updateNote}
-            onDeleteNote={deleteNote}
-            onCompleteNote={completeNote}
-            onMigrateNote={migrateNote}
-          />
-        </div>
+        <DesktopWidget
+          notes={notes}
+          completedNotes={completedNotes}
+          onAddNote={addNote}
+          onUpdateNote={updateNote}
+          onDeleteNote={deleteNote}
+          onCompleteNote={completeNote}
+          onMigrateNote={migrateNote}
+        />
       </div>
     </DndProvider>
   );

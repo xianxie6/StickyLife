@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MergedFocusCard } from './MergedFocusCard';
 import { StickyNote } from '../types';
 import { motion } from 'framer-motion';
+import { useStore } from '../store/useStore';
 
 interface DesktopWidgetProps {
   notes: StickyNote[];
@@ -22,20 +23,50 @@ export function DesktopWidget({
   onCompleteNote,
   onMigrateNote
 }: DesktopWidgetProps) {
-  const currentWeek = 4;
-  const completedWeeks = 3;
+  const { userSettings, weeks } = useStore();
+  
+  // 计算当前周（从用户设置或默认第1周）
+  const currentWeek = userSettings.currentWeek || 1;
+  
+  // 计算已完成的周数（该周所有 KR 的进度都 >= 100%）
+  const completedWeeks = useMemo(() => {
+    if (weeks.length === 0) return 0;
+    
+    // 获取所有唯一的周数
+    const uniqueWeeks = new Set(weeks.map(kr => kr.week));
+    let completedCount = 0;
+    
+    // 检查每一周是否完成
+    uniqueWeeks.forEach(week => {
+      const weekKRs = weeks.filter(k => k.week === week);
+      // 如果该周有 KR 且所有 KR 的进度都 >= 100%，则认为该周完成
+      if (weekKRs.length > 0 && weekKRs.every(k => k.progress >= 100)) {
+        completedCount++;
+      }
+    });
+    
+    return completedCount;
+  }, [weeks]);
 
   const dailyNotes = notes.filter(n => n.layer === 'daily');
 
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-transparent">
-      {/* 只显示卡片，无背景 */}
+    <div 
+      className="w-full h-full flex items-center justify-center overflow-hidden" 
+      style={{ 
+        pointerEvents: 'none' // 背景区域设置为点击穿透
+      }}
+    >
+      {/* 卡片容器 */}
       <motion.div 
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="absolute bottom-16 left-1/2 -translate-x-1/2 pointer-events-auto"
+        className="w-full h-full flex items-center justify-center"
+        style={{ 
+          pointerEvents: 'auto' // 卡片区域可以接收鼠标事件
+        }}
       >
         <MergedFocusCard
           notes={dailyNotes}

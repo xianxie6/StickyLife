@@ -1,8 +1,8 @@
 {
-  "name": "sticky-life",
+  "name": "app-12",
   "private": true,
   "version": "0.1.0",
-  "description": "A transparent, always-on-bottom desktop overlay for sticky notes",
+  "description": "A transparent, always-on-bottom desktop overlay for sticky notes - 12",
   "author": "xianxie6",
   "type": "module",
   "main": "dist-electron/main.js",
@@ -18,9 +18,9 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "@types/three": "^0.182.0",
     "@react-three/drei": "^9.88.0",
     "@react-three/fiber": "^8.15.0",
+    "@types/three": "^0.182.0",
     "framer-motion": "^12.25.0",
     "lucide-react": "^0.562.0",
     "react": "^18.2.0",
@@ -28,6 +28,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.2.0",
+    "tauri-plugin-store-api": "^0.0.0",
     "three": "^0.182.0"
   },
   "devDependencies": {
@@ -47,8 +48,8 @@
     "wait-on": "^7.2.0"
   },
   "build": {
-    "appId": "com.stickylife.app",
-    "productName": "StickyLife",
+    "appId": "com.app12.app",
+    "productName": "12",
     "directories": {
       "output": "release"
     },

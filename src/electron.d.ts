@@ -6,6 +6,7 @@ declare global {
     electronAPI?: {
       setIgnoreCursorEvents: (ignore: boolean) => Promise<{ success: boolean }>;
       hideWindow: () => Promise<{ success: boolean }>;
+      resizeWindow: (width: number, height: number) => Promise<{ success: boolean }>;
     };
   }
 }
